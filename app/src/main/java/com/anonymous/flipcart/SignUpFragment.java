@@ -30,16 +30,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SignUpFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     public SignUpFragment() {
         // Required empty public constructor
     }
@@ -56,24 +46,6 @@ public class SignUpFragment extends Fragment {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
     private final String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+.[a-z]+";
-
-    public static SignUpFragment newInstance(String param1, String param2) {
-        SignUpFragment fragment = new SignUpFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -101,7 +73,7 @@ public class SignUpFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        alreadyHaveAnAccount.setOnClickListener(v -> getFragment(new SignInFragment()));
+        alreadyHaveAnAccount.setOnClickListener(v -> setFragment(new SignInFragment()));
 
         email.addTextChangedListener(new TextWatcher() {
             @Override
@@ -246,7 +218,7 @@ public class SignUpFragment extends Fragment {
         }
     }
 
-    private void getFragment(SignInFragment signInFragment) {
+    private void setFragment(SignInFragment signInFragment) {
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.slide_from_left, R.anim.slideout_from_right);
         fragmentTransaction.replace(parentFrameLayout.getId(), signInFragment);

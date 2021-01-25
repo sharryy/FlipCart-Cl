@@ -25,9 +25,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        startActivity(currentUser == null ? new Intent(MainActivity.this, RegisterActivity.class)
-                : new Intent(MainActivity.this, MainActivity.class));
+        startActivity(currentUser == null ? new Intent(MainActivity.this, RegisterActivity.class) : new Intent(MainActivity.this, HomeActivity.class));
         finish();
+
 
     }
 }

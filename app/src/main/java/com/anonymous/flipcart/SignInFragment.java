@@ -24,22 +24,16 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Objects;
+
 public class SignInFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public SignInFragment() {
         // Required empty public constructor
     }
 
     private TextView dontHaveAnAccount;
+    private TextView forgotPassword;
     private FrameLayout parentFrameLayout;
     private EditText emailSignIn;
     private EditText passwordSignIn;
@@ -49,29 +43,12 @@ public class SignInFragment extends Fragment {
     private String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+.[a-z]+";
     private ProgressBar progressBar;
 
-    public static SignInFragment newInstance(String param1, String param2) {
-        SignInFragment fragment = new SignInFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_sign_in, container, false);
         dontHaveAnAccount = view.findViewById(R.id.tv_dont_have_an_account);
+        forgotPassword = view.findViewById(R.id.sign_in_forgot_password);
         parentFrameLayout = getActivity().findViewById(R.id.register_frame_layout);
         emailSignIn = view.findViewById(R.id.sign_in_email);
         passwordSignIn = view.findViewById(R.id.sign_in_password);
@@ -86,6 +63,10 @@ public class SignInFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         dontHaveAnAccount.setOnClickListener(v -> setFragment(new SignUpFragment()));
+        forgotPassword.setOnClickListener(v -> {
+            RegisterActivity.onResetPasswordFragment = true;
+            setFragment(new ResetPasswordFragment());
+        });
         emailSignIn.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -162,10 +143,10 @@ public class SignInFragment extends Fragment {
         }
     }
 
-    private void setFragment(SignUpFragment signUpFragment) {
-        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+    private void setFragment(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.slide_from_right, R.anim.slideout_from_left);
-        fragmentTransaction.replace(parentFrameLayout.getId(), signUpFragment);
+        fragmentTransaction.replace(parentFrameLayout.getId(), fragment);
         fragmentTransaction.commit();
     }
 
