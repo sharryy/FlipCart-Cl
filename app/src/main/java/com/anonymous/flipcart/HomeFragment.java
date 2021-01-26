@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -37,6 +39,12 @@ public class HomeFragment extends Fragment {
     private ImageView stripAdImage;
     private ConstraintLayout stripAdContainer;
     /////////Strip  Ad
+
+    /////////Horizontal Product Layout
+    private TextView horizontalLayoutTitle;
+    private Button horizontalLayoutViewAllBtn;
+    private RecyclerView horizontalRecyclerView;
+    /////////Horizontal Product Layout
 
     public HomeFragment() {
         // Required empty public constructor
@@ -100,9 +108,7 @@ public class HomeFragment extends Fragment {
         bannerSliderViewPager.setOnTouchListener((v, event) -> {
             pageLooper();
             stopBannerSlideShow();
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                startBannerSlideshow();
-            }
+            if (event.getAction() == MotionEvent.ACTION_UP) startBannerSlideshow();
             return false;
         });
 
@@ -132,6 +138,31 @@ public class HomeFragment extends Fragment {
         stripAdImage.setImageResource(R.mipmap.strip_ad);
         stripAdContainer.setBackgroundColor(Color.parseColor("#000000"));
         /////////Strip  Ad
+
+        //////////Horizontal Product Layout
+        horizontalLayoutTitle = view.findViewById(R.id.horizontal_scroll_layout_title);
+        horizontalLayoutViewAllBtn = view.findViewById(R.id.horizontal_scroll_layout_view_all_button);
+        horizontalRecyclerView = view.findViewById(R.id.horizontal_scroll_layout_recyclerview);
+
+        List<HorizontalProductScrollModel> horizontalProductScrollModelList = new ArrayList<>();
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.mobile_phone, "Google Pixel 3", "SD 425 Processor", "Rs. 59999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.app_icon, "Google Pixel 3", "SD 425 Processor", "Rs. 59999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.app_round_icon, "Google Pixel 3", "SD 425 Processor", "Rs. 59999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.cart_black, "Google Pixel 3", "SD 425 Processor", "Rs. 59999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.custom_error_icon, "Google Pixel 3", "SD 425 Processor", "Rs. 59999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.ic_mail_outline_24px_green, "Google Pixel 3", "SD 425 Processor", "Rs. 59999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.ic_mail_outline_24px, "Google Pixel 3", "SD 425 Processor", "Rs. 59999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.ic_home_24px, "Google Pixel 3", "SD 425 Processor", "Rs. 59999/-"));
+
+        horizontalProductScrollModelList.forEach(System.out::println);
+
+        HorizontalProductScrollAdapter horizontalProductScrollAdapter = new HorizontalProductScrollAdapter(horizontalProductScrollModelList);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        horizontalRecyclerView.setLayoutManager(layoutManager);
+        horizontalRecyclerView.setAdapter(horizontalProductScrollAdapter);
+        horizontalProductScrollAdapter.notifyDataSetChanged();
+        //////////Horizontal Product Layout
 
 
         return view;
