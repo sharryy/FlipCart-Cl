@@ -14,7 +14,8 @@
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/Theme.FlipCart.NoActionBar"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.FlipCart.NoActionBar" />
         <activity
             android:name=".RegisterActivity"
             android:screenOrientation="portrait" />

@@ -1,12 +1,15 @@
 package com.anonymous.flipcart;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,15 +33,18 @@ public class HomeFragment extends Fragment {
     private final long PERIOD_TIME = 3000;
     //////////Banner Slider
 
+    /////////Strip  Ad
+    private ImageView stripAdImage;
+    private ConstraintLayout stripAdContainer;
+    /////////Strip  Ad
+
     public HomeFragment() {
         // Required empty public constructor
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home2, container, false);
 
         categoryRecyclerView = view.findViewById(R.id.category_recyclerview);
@@ -51,25 +57,26 @@ public class HomeFragment extends Fragment {
         bannerSliderViewPager = view.findViewById(R.id.banner_slider_view_pager);
         sliderModelList = new ArrayList<>();
 
-        sliderModelList.add(new SliderModel(R.mipmap.ic_home_24px));
-        sliderModelList.add(new SliderModel(R.mipmap.custom_error_icon));
+        sliderModelList.add(new SliderModel(R.mipmap.ic_home_24px, "#077AE4"));
+        sliderModelList.add(new SliderModel(R.mipmap.custom_error_icon, "#077AE4"));
+        sliderModelList.add(new SliderModel(R.mipmap.ic_mail_outline_24px_green, "#077AE4"));
 
-        sliderModelList.add(new SliderModel(R.mipmap.ic_mail_outline_24px_green));
-        sliderModelList.add(new SliderModel(R.mipmap.ic_mail_outline_24px));
-        sliderModelList.add(new SliderModel(R.mipmap.app_icon));
-        sliderModelList.add(new SliderModel(R.mipmap.ic_launcher));
-        sliderModelList.add(new SliderModel(R.mipmap.cart_black));
-        sliderModelList.add(new SliderModel(R.mipmap.profile_placeholder));
-        sliderModelList.add(new SliderModel(R.mipmap.ic_home_24px));
-        sliderModelList.add(new SliderModel(R.mipmap.custom_error_icon));
+        sliderModelList.add(new SliderModel(R.mipmap.ic_mail_outline_24px, "#077AE4"));
+        sliderModelList.add(new SliderModel(R.mipmap.app_icon, "#077AE4"));
+        sliderModelList.add(new SliderModel(R.mipmap.ic_launcher, "#077AE4"));
+        sliderModelList.add(new SliderModel(R.mipmap.cart_black, "#077AE4"));
+        sliderModelList.add(new SliderModel(R.mipmap.profile_placeholder, "#077AE4"));
+        sliderModelList.add(new SliderModel(R.mipmap.ic_home_24px, "#077AE4"));
 
-        sliderModelList.add(new SliderModel(R.mipmap.ic_mail_outline_24px_green));
-        sliderModelList.add(new SliderModel(R.mipmap.ic_mail_outline_24px));
+        sliderModelList.add(new SliderModel(R.mipmap.custom_error_icon, "#077AE4"));
+        sliderModelList.add(new SliderModel(R.mipmap.ic_mail_outline_24px_green, "#077AE4"));
+        sliderModelList.add(new SliderModel(R.mipmap.ic_mail_outline_24px, "#077AE4"));
 
         SliderAdapter sliderAdapter = new SliderAdapter(sliderModelList);
         bannerSliderViewPager.setAdapter(sliderAdapter);
         bannerSliderViewPager.setClipToPadding(false);
         bannerSliderViewPager.setPageMargin(20);
+        bannerSliderViewPager.setCurrentItem(currentPage);
 
         ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
             @Override
@@ -84,24 +91,19 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-                if (state == ViewPager.SCROLL_STATE_IDLE) {
-                    pageLooper();
-                }
+                if (state == ViewPager.SCROLL_STATE_IDLE) pageLooper();
             }
         };
         bannerSliderViewPager.addOnPageChangeListener(onPageChangeListener);
         startBannerSlideshow();
 
-        bannerSliderViewPager.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                pageLooper();
-                stopBannerSlideShow();
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    startBannerSlideshow();
-                }
-                return false;
+        bannerSliderViewPager.setOnTouchListener((v, event) -> {
+            pageLooper();
+            stopBannerSlideShow();
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                startBannerSlideshow();
             }
+            return false;
         });
 
 
@@ -123,6 +125,15 @@ public class HomeFragment extends Fragment {
         categoryRecyclerView.setAdapter(categoryAdapter);
         categoryAdapter.notifyDataSetChanged();
 
+        /////////Strip  Ad
+        stripAdImage = view.findViewById(R.id.strip_ad_image);
+        stripAdContainer = view.findViewById(R.id.strip_ad_container);
+
+        stripAdImage.setImageResource(R.mipmap.strip_ad);
+        stripAdContainer.setBackgroundColor(Color.parseColor("#000000"));
+        /////////Strip  Ad
+
+
         return view;
     }
 
@@ -142,9 +153,7 @@ public class HomeFragment extends Fragment {
     private void startBannerSlideshow() {
         Handler handler = new Handler();
         Runnable update = () -> {
-            if (currentPage >= sliderModelList.size()) {
-                currentPage = 1;
-            }
+            if (currentPage >= sliderModelList.size()) currentPage = 1;
             bannerSliderViewPager.setCurrentItem(currentPage++, true);
         };
         timer = new Timer();
