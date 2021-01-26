@@ -9,7 +9,7 @@
             android:title="My Mall" />
         <item
             android:id="@+id/nav_my_orders"
-            android:icon="@mipmap/my_orders"
+            android:icon="@mipmap/my_orders_"
             android:title="My Orders" />
         <item
             android:id="@+id/nav_my_rewards"
